@@ -20,19 +20,19 @@ const connectDB = async () => {
     throw new Error("MONGO_URI still has placeholder values");
   }
 
-  mongoose.connection.on("connected", () => {
-    console.log("Mongoose connected");
-  });
+  try {
+    const conn = await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 30000,
+    });
 
-  mongoose.connection.on("error", (error) => {
-    console.error("Mongoose connection error event:", error.message);
-  });
-
-  const conn = await mongoose.connect(mongoUri, {
-    serverSelectionTimeoutMS: 20000,
-  });
-
-  console.log(`MongoDB connected successfully: ${conn.connection.host}`);
+    console.log(`MongoDB connected successfully: ${conn.connection.host}`);
+    return conn;
+  } catch (error) {
+    console.error("MONGODB CONNECTION FAILED");
+    console.error("ERROR NAME:", error.name);
+    console.error("ERROR MESSAGE:", error.message);
+    throw error;
+  }
 };
 
 module.exports = connectDB;

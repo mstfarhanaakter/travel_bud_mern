@@ -1,12 +1,16 @@
 require("dotenv").config();
 
 process.on("unhandledRejection", (error) => {
-  console.error("UNHANDLED REJECTION:", error);
+  console.error("UNHANDLED REJECTION NAME:", error.name);
+  console.error("UNHANDLED REJECTION MESSAGE:", error.message);
+  console.error(error);
   process.exit(1);
 });
 
 process.on("uncaughtException", (error) => {
-  console.error("UNCAUGHT EXCEPTION:", error);
+  console.error("UNCAUGHT EXCEPTION NAME:", error.name);
+  console.error("UNCAUGHT EXCEPTION MESSAGE:", error.message);
+  console.error(error);
   process.exit(1);
 });
 
@@ -27,7 +31,7 @@ const startServer = async () => {
   } catch (error) {
     console.error("SERVER START ERROR NAME:", error.name);
     console.error("SERVER START ERROR MESSAGE:", error.message);
-    console.error("SERVER START ERROR STACK:", error.stack);
+    console.error("SERVER START ERROR FULL:", error);
     process.exit(1);
   }
 };
