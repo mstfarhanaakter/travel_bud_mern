@@ -6,16 +6,11 @@ const bookingRoutes = require("./routes/bookingRoutes");
 
 const app = express();
 
-/* 
-  CORS FIX
-  এটা সব route-এর আগে থাকতে হবে।
-*/
 const allowedOrigins = [
-  "https://travelbud.farhanashetu.online",
-  "http://travelbud.farhanashetu.online",
+  process.env.CLIENT_URL,
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-];
+].filter(Boolean);
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -31,10 +26,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
-  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
