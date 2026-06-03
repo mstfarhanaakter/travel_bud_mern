@@ -3,8 +3,13 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
 
+  console.log("ENV CHECK:");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log("MONGO_URI exists:", !!mongoUri);
+  console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
+
   if (!mongoUri) {
-    throw new Error("MONGO_URI is missing");
+    throw new Error("MONGO_URI is missing in Render Environment Variables");
   }
 
   if (
