@@ -16,16 +16,18 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  try {
-    console.log("Starting Travel Bud API...");
+  console.log("Starting Travel Bud API...");
 
+  try {
     await connectDB();
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Travel Bud API running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("SERVER START ERROR:", error);
+    console.error("SERVER START ERROR NAME:", error.name);
+    console.error("SERVER START ERROR MESSAGE:", error.message);
+    console.error("SERVER START ERROR STACK:", error.stack);
     process.exit(1);
   }
 };
