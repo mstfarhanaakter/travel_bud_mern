@@ -8,17 +8,22 @@ const app = express();
 
 const allowedOrigins = [
   process.env.CLIENT_URL,
+  "https://travel-bud-mern.vercel.app",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ].filter(Boolean);
 
+// CORS must be before all routes
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  if (!origin || allowedOrigins.includes(origin)) {
-    if (origin) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
-    }
+  const isAllowedOrigin =
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    origin.endsWith(".vercel.app");
+
+  if (isAllowedOrigin && origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
   }
 
   res.setHeader("Vary", "Origin");
@@ -26,7 +31,10 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
@@ -42,6 +50,19 @@ app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "Travel Bud API is running",
+  });
+});
+
+app.get("/api", (req, res) => {
+  res.json({
+    success: true,
+    message: "Travel Bud API base route is working",
+    routes: {
+      health: "/api/health",
+      auth: "/api/auth",
+      packages: "/api/packages",
+      bookings: "/api/bookings",
+    },
   });
 });
 
